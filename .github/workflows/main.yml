@@ -22,4 +22,4 @@ jobs:
       run: |
         ssh bettered@https://betteredgestechnologies.com.ng "cd /public_html/ascend && git pull origin main && composer install --no-dev --prefer-dist && php artisan migrate --force && php artisan config:cache && php artisan route:cache"
       env:
-        SSH_KNOWN_HOSTS: https://betteredgestechnologies.com.ng 
+        SSH_KNOWN_HOSTS: betteredgestechnologies.com.ng 
