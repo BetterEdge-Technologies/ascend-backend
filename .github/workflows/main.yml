@@ -1,25 +1,30 @@
-name: FTP Deploy
-
 on:
   push:
     branches:
       - main
-
+name: 🚀 FTP deploy on push
 jobs:
-  ftp-deploy:
-    name: FTP Deploy
+  web-deploy:
+    name: 🎉 Deploy to test
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2
 
-      - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
-        with:
-          server: ftp.betteredgestechnologies.com.ng
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-          protocol: ftps
-          debug: true
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+
+    - name: Remove cached bootstrap file
+      run: sudo rm -rf bootstrap/services.php bootstrap/cache/packages.php
+    
+    - name: Install composer dependencies
+      run: composer install --no-interaction --prefer-dist
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        server: ftp.betteredgestechnologies.com.ng
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
